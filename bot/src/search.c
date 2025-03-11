@@ -41,5 +41,5 @@ struct search_result minimax(const struct position *pos, int depth) {
 }
 
 struct move search(const struct search_info *info) {
-	return minimax(info->pos, 5).move;
+	return minimax(info->pos, 4).move;
 }
