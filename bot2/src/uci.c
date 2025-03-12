@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <time.h>
 
 static char *get_line(FILE *stream) {
 	size_t capacity = 1024;
@@ -85,6 +86,37 @@ static void uci_position(struct position *pos, char *token, char *store) {
 	}
 }
 
+static int moves_total_game = -1;
+/*char defence_e2e4_Black[4][4] = {"b8c6", "e7e6", "d7d5", "c7c6"};*/
+
+int openingsbook(const struct position *pos) {
+	static char *move = NULL;
+
+	if (pos->side_to_move == WHITE)
+	{
+		if (moves_total_game == 0)
+			move = "e2e4";
+		else if (moves_total_game == 1)
+			move = "g1f3";
+	}
+	else
+	{
+		if (moves_total_game == 0)
+			move = "d7d5";
+	}
+	
+	if (move == NULL)
+		return (0);
+	printf("bestmove %s\n", move);
+	return (1);
+}
+
+/*
+struct move search(const struct search_info *info) {
+	return minimax(info->pos, 4).move;
+
+}*/
+
 static void uci_go(const struct position *pos, char *token, char *store) {
 	struct search_info info;
 	struct move move;
@@ -123,7 +155,12 @@ static void uci_go(const struct position *pos, char *token, char *store) {
 			break;
 		}
 	}
-
+	moves_total_game++;
+	if (moves_total_game < 1)
+	{
+		if (openingsbook(pos))
+			return ;
+	}
 	move = search(&info);
 
 	buffer[0] = "abcdefgh"[FILE(move.from_square)];

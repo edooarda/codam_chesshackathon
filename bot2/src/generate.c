@@ -216,6 +216,5 @@ size_t generate_legal_moves(const struct position *pos, struct move *moves) {
 			moves[count++] = moves[index];
 		}
 	}
-
 	return count;
 }
