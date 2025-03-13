@@ -39,6 +39,9 @@ struct position {
 	int en_passant_square;
 
 	int	amount_pieces_in_play;
+	int count_white;
+	int count_black;
+	int count_sliders;
 };
 
 /* print out information about the position. useful for debugging.           */

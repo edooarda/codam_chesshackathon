@@ -62,10 +62,26 @@ void print_position(const struct position *pos, FILE *stream) {
 
 void	count_pieces(struct position *pos){
 	int index;
+	int piece;
 
+	pos->amount_pieces_in_play = 0;
+	pos->count_black = 0;
+	pos->count_white = 0;
 	for(index = 0; index < 64; index++){
-		if (pos->board[index] != NO_PIECE)
+		if (pos->board[index] != NO_PIECE){
 			pos->amount_pieces_in_play++;
+			piece = pos->board[index];
+			if (COLOR(piece) == WHITE){
+				pos->count_white++;
+				if(TYPE(piece) == ROOK || TYPE(piece) == BISHOP || TYPE(piece) == QUEEN)
+					pos->count_sliders++;
+			}
+			else{
+				if(TYPE(piece) == ROOK || TYPE(piece) == BISHOP || TYPE(piece) == QUEEN)
+					pos->count_sliders++;
+				pos->count_black++;
+			}
+		}
 	}
 }
 

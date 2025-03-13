@@ -55,13 +55,12 @@ int compare_moves(const void *a, const void *b) {
     return (score2 - score1);
 }
 
-struct search_result minimax2(time_t start_time, const struct position *pos, int depth, int alpha, int beta) {
+struct search_result minimax2(const struct position *pos, int depth, int alpha, int beta) {
 	struct search_result	result;
 	struct move				moves[MAX_MOVES];
 	int 					score;
 	size_t					count;
 	size_t					index;
-	time_t					now;
 
 	if (depth == 0)
 	{
@@ -90,15 +89,7 @@ struct search_result minimax2(time_t start_time, const struct position *pos, int
 
 		do_move(&copy, moves[index]);
 
-
-		if (index % 5 == 0)
-		{ 
-			now = time(NULL);
-			if (now - start_time >= 45)
-				break;
-		}
-
-		score = -minimax2(start_time, &copy, depth - 1, -alpha, -beta).score * ((6 - depth) / 2);
+		score = -minimax2(&copy, depth - 1, -alpha, -beta).score * ((6 - depth) / 2);
 		if (score > result.score)
 		{
 			result.score = score;
@@ -150,11 +141,27 @@ struct search_result minimax(const struct position *pos, int depth) {
 }
 
 struct move search(const struct search_info *info) {
-	const time_t	start_time = time(NULL);
 	int				depth = 4;
 	struct move		move;
-
-	move = minimax2(start_time, info->pos, depth, INT_MIN, INT_MAX).move;
+	if (info->pos->count_sliders < 6)
+		depth = 5;
+	if (info->pos->count_sliders < 3)
+		depth = 6;
+	if (info->pos->count_sliders == 0)
+		depth = 10;
+	// if(info->pos->side_to_move == WHITE){
+	// 	if (info->pos->count_white < 12)
+	// 		depth = 6;
+	// 	if (info->pos->count_white < 5)
+	// 		depth = 7;
+	// }
+	// if(info->pos->side_to_move == BLACK){
+	// 	if (info->pos->count_black < 12)
+	// 		depth = 6;
+	// 	if (info->pos->count_black < 5)
+	// 		depth = 7;
+	// }
+	move = minimax2(info->pos, depth, INT_MIN, INT_MAX).move;
 	add_move(move);
 	return (move);
 }

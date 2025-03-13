@@ -167,6 +167,7 @@ void	attack_score(int *score_total, const struct position *pos, int square) {
 	struct move		move;
 	size_t			i;
 	int				piece;
+	const int		value[6] = { 10, 30, 30, 50, 90, 1000 };
 	
 	for (i = 0; i < 64; i++)
 	{
@@ -180,7 +181,7 @@ void	attack_score(int *score_total, const struct position *pos, int square) {
 			if (is_possible_move(move, pos))
 			{
 				piece = pos->board[square];
-				(*score_total) -= piece_value[TYPE(piece)];
+				(*score_total) -= value[TYPE(piece)];
 			}
 		}
 	}
@@ -246,7 +247,7 @@ int evaluate(const struct position *pos) {
 
 			if (TYPE(piece) == KING)
 				score[COLOR(piece)] -= king_middle_field_score(square);
-			
+
 		}
 	}
 	return score[pos->side_to_move] - score[1 - pos->side_to_move];
