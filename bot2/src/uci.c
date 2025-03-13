@@ -91,34 +91,34 @@ static void uci_position(struct position *pos, char *token, char *store) {
 
 static int moves_total_game = 0;
 struct opening {
-	char moves[3][6];
-	int move_count;
-	int is_white;
+	char	moves[3][6];
+	int		move_count;
+	int		is_white;
 };
 
 static struct opening openings[5] = {
-    { { "e2e4", "g1f3", "d2d4" }, 3, 1 },
-    { { "d2d4", "c2c4", "g1f3" }, 3, 1 },
-    { { "c7c5", "d7d6", "g8f6" }, 3, 0 },
-    { { "e7e5", "g8f6", "d7d6" }, 3, 0 },
-    { { "d7d5", "c7c6", "e7e6" }, 3, 0 } 
+	{ { "e2e4", "g1f3", "d2d4" }, 3, 1 },
+	{ { "d2d4", "c2c4", "g1f3" }, 3, 1 },
+	{ { "c7c5", "d7d6", "g8f6" }, 3, 0 },
+	{ { "e7e5", "g8f6", "d7d6" }, 3, 0 },
+	{ { "d7d5", "c7c6", "e7e6" }, 3, 0 } 
 };
 
 int openingsbook(const struct position *pos, int moves) {
 	static char		move[6];
 	int				i;
 
-    for (i = 0; i < 3; i++) {
-        if ((pos->side_to_move == WHITE && openings[i].is_white) ||
-            (pos->side_to_move == BLACK && !openings[i].is_white)) {
-            
-            if (moves < openings[i].move_count) {
-                strcpy(move, openings[i].moves[moves]);
-                printf("bestmove %s\n", move);
-                return (1);
-            }
-        }
-    }
+	for (i = 0; i < 3; i++) {
+		if ((pos->side_to_move == WHITE && openings[i].is_white) ||
+			(pos->side_to_move == BLACK && !openings[i].is_white))
+		{
+			if (moves < openings[i].move_count) {
+				strcpy(move, openings[i].moves[moves]);
+				printf("bestmove %s\n", move);
+				return (1);
+			}
+		}
+	}
 	return (0);
 }
 

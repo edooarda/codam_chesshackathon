@@ -27,13 +27,10 @@ void add_move(struct move move) {
 	move_index++;
 }
 
-/* adding SEE (Static Exchange Evaluation) ? */
-
-/* MVV-LVA: Most Valuable Victim - Least Valuable Attacker */
 static const struct position *sort_pos;
 
 int compare_moves(const void *a, const void *b) {
-	static const int	piece_value[6] = { 100, 300, 300, 500, 900, 10000};
+	static const int	piece_value[6] = {100, 300, 300, 500, 900, 10000};
 	const struct move	*move1 = (const struct move *)a;
 	const struct move	*move2 = (const struct move *)b;
 	int					captured1 = sort_pos->board[move1->to_square];
@@ -52,7 +49,7 @@ int compare_moves(const void *a, const void *b) {
 		score1 += piece_value[move1->promotion_type];
 	if (move2->promotion_type != NO_PIECE)
 		score2 += piece_value[move2->promotion_type];
-    return (score2 - score1);
+	return (score2 - score1);
 }
 
 struct search_result minimax2(const struct position *pos, int depth, int alpha, int beta) {
@@ -105,41 +102,6 @@ struct search_result minimax2(const struct position *pos, int depth, int alpha, 
 	return (result);
 }
 
-struct search_result minimax(const struct position *pos, int depth) {
-	struct search_result result;
-
-	result.score = -1000000;
-
-	if (depth == 0) {
-		result.score = evaluate(pos) * (6 * depth);
-	} else {
-		struct move moves[MAX_MOVES];
-		size_t count = generate_legal_moves(pos, moves);
-		size_t index;
-
-		for (index = 0; index < count; index++) {
-			struct position copy = *pos;
-			int score;
-
-			/* do a move, the current player in `copy` is then the opponent, */
-			/* and so when we call minimax we get the score of the opponent. */
-			do_move(&copy, moves[index]);
-
-			/* minimax is called recursively. this call returns the score of */
-			/* the opponent, so we must negate it to get our score.          */
-			score = -minimax(&copy, depth - 1).score * (6 - depth);
-
-			/* update the best move if we found a better one.                */
-			if (score > result.score) {
-				result.move = moves[index];
-				result.score = score;
-			}
-		}
-	}
-
-	return result;
-}
-
 struct move search(const struct search_info *info) {
 	int				depth = 4;
 	struct move		move;
@@ -149,18 +111,6 @@ struct move search(const struct search_info *info) {
 		depth = 6;
 	if (info->pos->count_sliders == 0)
 		depth = 10;
-	// if(info->pos->side_to_move == WHITE){
-	// 	if (info->pos->count_white < 12)
-	// 		depth = 6;
-	// 	if (info->pos->count_white < 5)
-	// 		depth = 7;
-	// }
-	// if(info->pos->side_to_move == BLACK){
-	// 	if (info->pos->count_black < 12)
-	// 		depth = 6;
-	// 	if (info->pos->count_black < 5)
-	// 		depth = 7;
-	// }
 	move = minimax2(info->pos, depth, INT_MIN, INT_MAX).move;
 	add_move(move);
 	return (move);
