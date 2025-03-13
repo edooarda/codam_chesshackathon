@@ -9,7 +9,7 @@ int main(void) {
 #if PERFT
 	perft_run();
 #else
-	uci_run("team", "E&S&M");
+	uci_run("Code Artists", "sramon edribeir mvan-ess");
 #endif
 
 	return EXIT_SUCCESS;
