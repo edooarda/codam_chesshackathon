@@ -198,7 +198,6 @@ size_t generate_pseudo_legal_moves(const struct position *pos, struct move *move
 					moves[count++] = make_move(square, c1, NO_TYPE);
 				}
 			}
-
 			break;
 		}
 	}
