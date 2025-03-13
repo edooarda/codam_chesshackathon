@@ -151,7 +151,7 @@ struct search_result minimax(const struct position *pos, int depth) {
 
 struct move search(const struct search_info *info) {
 	const time_t	start_time = time(NULL);
-	int				depth = 5;
+	int				depth = 4;
 	struct move		move;
 
 	move = minimax2(start_time, info->pos, depth, INT_MIN, INT_MAX).move;

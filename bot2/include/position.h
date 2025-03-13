@@ -37,6 +37,8 @@ struct position {
 
 	/* en passant square, may be `NO_SQUARE`.                                */
 	int en_passant_square;
+
+	int	amount_pieces_in_play;
 };
 
 /* print out information about the position. useful for debugging.           */

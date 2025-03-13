@@ -60,6 +60,15 @@ void print_position(const struct position *pos, FILE *stream) {
 	fprintf(stream, "en passant square: %s\n", en_passant_square_buffer);
 }
 
+void	count_pieces(struct position *pos){
+	int index;
+
+	for(index = 0; index < 64; index++){
+		if (pos->board[index] != NO_PIECE)
+			pos->amount_pieces_in_play++;
+	}
+}
+
 int parse_position(struct position *pos, const char *fen) {
 	int file;
 	int rank;
@@ -183,6 +192,9 @@ int parse_position(struct position *pos, const char *fen) {
 	if (*fen) {
 		return FAILURE;
 	}
+
+	/* count amount of pieces still in play*/
+	count_pieces(pos);
 
 	return SUCCESS;
 }

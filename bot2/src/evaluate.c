@@ -2,6 +2,7 @@
 #include "generate.h"
 #include "move.h"
 #include "types.h"
+#include "stdbool.h"
 
 static const int piece_value[6] = { 100, 300, 300, 500, 900, 10000 };
 
@@ -51,11 +52,31 @@ int	king_middle_field_score(int square) {
 	return (0);
 }
 
+/*Check if the queens are still in play*/
+bool queens_still_in_play(const struct position *pos) {
+	int square;
+	int piece;
+	int count = 2;
+	for (square = 0; square < 64; square++){
+		piece = pos->board[square];
+		if (piece != NO_PIECE){
+			if (TYPE(piece) == QUEEN)
+				count--;
+		}
+	}
+	if (count == 0)
+		return (false);
+	return (true);
+}
+
 int evaluate(const struct position *pos) {
 	int score[2] = { 0, 0 };
 	int square;
 	int piece;
 
+	if (!queens_still_in_play(pos)){
+		//Change king score board.
+	}
 	for (square = 0; square < 64; square++) {
 		piece = pos->board[square];
 		
